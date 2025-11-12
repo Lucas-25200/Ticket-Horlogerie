@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Ticket Armage — Application locale</title>
+  <title>Ticket Armage — Multi-sauvegardes</title>
   <style>
     :root {
       --gray: #f2f4f7;
@@ -20,7 +20,7 @@
     }
 
     .card {
-      max-width: 900px;
+      max-width: 950px;
       margin: 0 auto;
       background: #fff;
       border-radius: 8px;
@@ -38,6 +38,14 @@
       gap: 8px;
       flex-wrap: wrap;
       margin-bottom: 12px
+    }
+
+    select,
+    input[type=text] {
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px
     }
 
     button {
@@ -69,7 +77,8 @@
     }
 
     .table-wrap {
-      overflow: auto
+      overflow: auto;
+      margin-top: 8px
     }
 
     table.ticket {
@@ -114,29 +123,21 @@
       margin-top: 10px;
       text-align: center
     }
-
-    @media (max-width:720px) {
-      .card {
-        padding: 12px
-      }
-
-      table.ticket thead th,
-      table.ticket td {
-        padding: 8px
-      }
-    }
   </style>
 </head>
 
 <body>
   <div class="card">
-    <h1>Application — Ticket Armage</h1>
+    <h1>Application — Ticket Armage (Multi-sauvegardes)</h1>
 
     <div class="toolbar">
+      <input id="saveName" type="text" placeholder="Nom de la sauvegarde" />
       <button id="saveLocal">💾 Sauvegarder</button>
+      <select id="savesList"></select>
       <button id="loadLocal">📂 Charger</button>
+      <button id="deleteSave" class="secondary">🗑 Supprimer</button>
       <button id="clearTable" class="secondary">🧹 Réinitialiser</button>
-      <span class="status" id="statusMsg">Non sauvegardé</span>
+      <span class="status" id="statusMsg">Prêt</span>
     </div>
 
     <div class="table-wrap">
@@ -221,8 +222,7 @@
       </table>
     </div>
 
-    <p class="small">Les données sont automatiquement enregistrées dans ton navigateur. Tu peux les sauvegarder ou les
-      charger manuellement via les boutons ci-dessus.</p>
+    <p class="small">Tu peux créer plusieurs sauvegardes locales et les recharger plus tard.</p>
   </div>
 
   <script>
@@ -230,8 +230,11 @@
     const saveBtn = document.getElementById('saveLocal');
     const loadBtn = document.getElementById('loadLocal');
     const clearBtn = document.getElementById('clearTable');
+    const deleteBtn = document.getElementById('deleteSave');
+    const saveName = document.getElementById('saveName');
+    const savesList = document.getElementById('savesList');
     const statusMsg = document.getElementById('statusMsg');
-    const STORAGE_KEY = 'ticketArmageData';
+    const STORAGE_KEY = 'ticketArmageSaves';
 
     function getTableData() {
       const rows = Array.from(table.querySelectorAll('tbody tr'));
@@ -246,49 +249,60 @@
       });
     }
 
+    function loadSavesList() {
+      const saves = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+      savesList.innerHTML = '';
+      Object.keys(saves).forEach(key => {
+        const opt = document.createElement('option');
+        opt.value = key;
+        opt.textContent = key;
+        savesList.appendChild(opt);
+      });
+    }
+
     function saveLocal() {
-      const data = getTableData();
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-      statusMsg.textContent = '💾 Sauvegardé localement (' + new Date().toLocaleTimeString() + ')';
+      const name = saveName.value.trim() || 'Sauvegarde_' + new Date().toLocaleString();
+      const saves = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+      saves[name] = getTableData();
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(saves));
+      loadSavesList();
+      savesList.value = name;
+      statusMsg.textContent = '💾 Sauvegarde « ' + name + ' » enregistrée.';
     }
 
     function loadLocal() {
-      const json = localStorage.getItem(STORAGE_KEY);
-      if (!json) return alert('Aucune sauvegarde trouvée.');
-      const data = JSON.parse(json);
-      setTableData(data);
-      statusMsg.textContent = '📂 Données chargées.';
+      const name = savesList.value;
+      if (!name) return alert('Aucune sauvegarde sélectionnée.');
+      const saves = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+      if (!saves[name]) return alert('Sauvegarde introuvable.');
+      setTableData(saves[name]);
+      statusMsg.textContent = '📂 Sauvegarde « ' + name + ' » chargée.';
     }
 
-    function autoSave() {
-      saveLocal();
+    function deleteSave() {
+      const name = savesList.value;
+      if (!name) return alert('Aucune sauvegarde sélectionnée.');
+      const saves = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+      if (confirm('Supprimer la sauvegarde « ' + name + ' » ?')) {
+        delete saves[name];
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(saves));
+        loadSavesList();
+        statusMsg.textContent = '🗑 Sauvegarde supprimée.';
+      }
     }
 
-    table.addEventListener('input', () => {
-      statusMsg.textContent = '⏳ Modifications en cours...';
-      clearTimeout(window.autoSaveTimer);
-      window.autoSaveTimer = setTimeout(autoSave, 800);
+    clearBtn.addEventListener('click', () => {
+      if (confirm('Effacer le tableau actuel ?')) {
+        table.querySelectorAll('td.editable').forEach(td => td.innerText = '');
+        statusMsg.textContent = '🧹 Tableau vidé';
+      }
     });
 
     saveBtn.addEventListener('click', saveLocal);
     loadBtn.addEventListener('click', loadLocal);
+    deleteBtn.addEventListener('click', deleteSave);
 
-    clearBtn.addEventListener('click', () => {
-      if (confirm('Effacer toutes les données du tableau ?')) {
-        table.querySelectorAll('td.editable').forEach(td => td.innerText = '');
-        localStorage.removeItem(STORAGE_KEY);
-        statusMsg.textContent = '🧹 Tableau réinitialisé';
-      }
-    });
-
-    // Charger automatiquement à l'ouverture si données existantes
-    window.addEventListener('DOMContentLoaded', () => {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) {
-        setTableData(JSON.parse(saved));
-        statusMsg.textContent = '📂 Données restaurées automatiquement';
-      }
-    });
+    window.addEventListener('DOMContentLoaded', loadSavesList);
   </script>
 </body>
 
