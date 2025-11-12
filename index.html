@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Ticket Armage — Multi-sauvegardes</title>
+  <title>Ticket Armage — Multi-sauvegardes (Responsive)</title>
   <style>
     :root {
       --gray: #f2f4f7;
@@ -14,29 +14,31 @@
 
     body {
       font-family: Inter, system-ui, Arial, sans-serif;
-      padding: 24px;
+      padding: 16px;
       background: linear-gradient(#fff, #fbfdff);
-      color: #222
+      color: #222;
     }
 
     .card {
-      max-width: 950px;
+      max-width: 1000px;
       margin: 0 auto;
       background: #fff;
-      border-radius: 8px;
+      border-radius: 12px;
       padding: 20px;
       box-shadow: 0 6px 20px rgba(30, 40, 50, 0.06)
     }
 
     h1 {
       font-size: 18px;
-      margin: 0 0 12px
+      margin: 0 0 12px;
+      text-align: center
     }
 
     .toolbar {
       display: flex;
-      gap: 8px;
       flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
       margin-bottom: 12px
     }
 
@@ -45,7 +47,9 @@
       padding: 8px;
       border: 1px solid #ccc;
       border-radius: 6px;
-      font-size: 14px
+      font-size: 14px;
+      flex: 1;
+      min-width: 130px
     }
 
     button {
@@ -56,7 +60,9 @@
       border-radius: 7px;
       cursor: pointer;
       font-weight: 600;
-      transition: 0.2s
+      transition: 0.2s;
+      flex: 1;
+      min-width: 100px
     }
 
     button:hover {
@@ -72,19 +78,20 @@
     .status {
       font-size: 13px;
       color: #555;
-      margin-left: auto;
-      align-self: center
+      width: 100%;
+      text-align: center;
+      margin-top: 6px
     }
 
     .table-wrap {
-      overflow: auto;
+      overflow-x: auto;
       margin-top: 8px
     }
 
     table.ticket {
       border-collapse: collapse;
       width: 100%;
-      min-width: 700px
+      min-width: 650px
     }
 
     table.ticket thead th {
@@ -98,8 +105,9 @@
     table.ticket th,
     table.ticket td {
       border: 1px solid var(--line);
-      padding: 12px;
-      text-align: center
+      padding: 10px;
+      text-align: center;
+      font-size: 14px
     }
 
     td.position {
@@ -123,6 +131,49 @@
       margin-top: 10px;
       text-align: center
     }
+
+    /* Responsive */
+    @media (max-width:768px) {
+      .card {
+        padding: 12px;
+        border-radius: 8px
+      }
+
+      h1 {
+        font-size: 16px
+      }
+
+      table.ticket th,
+      table.ticket td {
+        padding: 6px;
+        font-size: 12px
+      }
+
+      select,
+      input,
+      button {
+        font-size: 13px;
+        padding: 6px;
+        min-width: 80px
+      }
+    }
+
+    @media (max-width:480px) {
+      .toolbar {
+        flex-direction: column;
+        align-items: stretch
+      }
+
+      button,
+      select,
+      input {
+        width: 100%
+      }
+
+      .status {
+        font-size: 12px
+      }
+    }
   </style>
 </head>
 
@@ -137,7 +188,7 @@
       <button id="loadLocal">📂 Charger</button>
       <button id="deleteSave" class="secondary">🗑 Supprimer</button>
       <button id="clearTable" class="secondary">🧹 Réinitialiser</button>
-      <span class="status" id="statusMsg">Prêt</span>
+      <div class="status" id="statusMsg">Prêt</div>
     </div>
 
     <div class="table-wrap">
@@ -222,7 +273,7 @@
       </table>
     </div>
 
-    <p class="small">Tu peux créer plusieurs sauvegardes locales et les recharger plus tard.</p>
+    <p class="small">Tu peux créer plusieurs sauvegardes locales et les recharger plus tard, même sur mobile.</p>
   </div>
 
   <script>
