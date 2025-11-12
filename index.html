@@ -1,24 +1,295 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="fr">
 
 <head>
-  <title>Jeux De Piste</title>
-  <link href="Style.css" rel="stylesheet" />
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Ticket Armage — Application locale</title>
+  <style>
+    :root {
+      --gray: #f2f4f7;
+      --line: #bdbdbd;
+      --accent: #2b6cb0
+    }
+
+    body {
+      font-family: Inter, system-ui, Arial, sans-serif;
+      padding: 24px;
+      background: linear-gradient(#fff, #fbfdff);
+      color: #222
+    }
+
+    .card {
+      max-width: 900px;
+      margin: 0 auto;
+      background: #fff;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 6px 20px rgba(30, 40, 50, 0.06)
+    }
+
+    h1 {
+      font-size: 18px;
+      margin: 0 0 12px
+    }
+
+    .toolbar {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 12px
+    }
+
+    button {
+      background: var(--accent);
+      color: #fff;
+      border: 0;
+      padding: 8px 12px;
+      border-radius: 7px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: 0.2s
+    }
+
+    button:hover {
+      opacity: 0.85
+    }
+
+    button.secondary {
+      background: #fff;
+      color: var(--accent);
+      border: 1px solid var(--accent)
+    }
+
+    .status {
+      font-size: 13px;
+      color: #555;
+      margin-left: auto;
+      align-self: center
+    }
+
+    .table-wrap {
+      overflow: auto
+    }
+
+    table.ticket {
+      border-collapse: collapse;
+      width: 100%;
+      min-width: 700px
+    }
+
+    table.ticket thead th {
+      background: var(--gray);
+      border: 1px solid var(--line);
+      padding: 8px;
+      text-align: center;
+      font-weight: 700
+    }
+
+    table.ticket th,
+    table.ticket td {
+      border: 1px solid var(--line);
+      padding: 12px;
+      text-align: center
+    }
+
+    td.position {
+      font-weight: 700;
+      text-align: left;
+      padding-left: 14px;
+      background: #fff
+    }
+
+    td.editable {
+      min-width: 80px
+    }
+
+    td.editable[contenteditable] {
+      background: #fff
+    }
+
+    .small {
+      font-size: 12px;
+      color: #555;
+      margin-top: 10px;
+      text-align: center
+    }
+
+    @media (max-width:720px) {
+      .card {
+        padding: 12px
+      }
+
+      table.ticket thead th,
+      table.ticket td {
+        padding: 8px
+      }
+    }
+  </style>
 </head>
 
 <body>
-  <div class="conteneur">
-    <div class="boite" id="objet00">
-      <div class="conteneur2">
-        <h1>Jeux de Piste</h1>
-        <h2>
-          le But du jeu et de réussir les étapes et d'avoir le plus de points.
-        </h2>
-        <a href="rentre.html" class="btn-play">Play</a>
-      </div>
+  <div class="card">
+    <h1>Application — Ticket Armage</h1>
+
+    <div class="toolbar">
+      <button id="saveLocal">💾 Sauvegarder</button>
+      <button id="loadLocal">📂 Charger</button>
+      <button id="clearTable" class="secondary">🧹 Réinitialiser</button>
+      <span class="status" id="statusMsg">Non sauvegardé</span>
     </div>
+
+    <div class="table-wrap">
+      <table class="ticket" id="ticketTable">
+        <thead>
+          <tr>
+            <th colspan="5">TICKET N° :</th>
+          </tr>
+          <tr>
+            <th>Positions</th>
+            <th>Armage 0h</th>
+            <th></th>
+            <th>Armage 24h</th>
+            <th></th>
+          </tr>
+          <tr>
+            <th></th>
+            <th>Rate</th>
+            <th>Ampl.</th>
+            <th>Rate</th>
+            <th>Ampl.</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="position">CH</td>
+            <td class="editable" contenteditable></td>
+            <td class="editable" contenteditable></td>
+            <td class="editable" contenteditable></td>
+            <td class="editable" contenteditable></td>
+          </tr>
+          <tr>
+            <td class="position">FH</td>
+            <td class="editable" contenteditable></td>
+            <td class="editable" contenteditable></td>
+            <td class="editable" contenteditable></td>
+            <td class="editable" contenteditable></td>
+          </tr>
+          <tr>
+            <td class="position">3H V/H</td>
+            <td class="editable" contenteditable></td>
+            <td class="editable" contenteditable></td>
+            <td class="editable" contenteditable></td>
+            <td class="editable" contenteditable></td>
+          </tr>
+          <tr>
+            <td class="position">6H V/D</td>
+            <td class="editable" contenteditable></td>
+            <td class="editable" contenteditable></td>
+            <td class="editable" contenteditable></td>
+            <td class="editable" contenteditable></td>
+          </tr>
+          <tr>
+            <td class="position">9H V/B</td>
+            <td class="editable" contenteditable></td>
+            <td class="editable" contenteditable></td>
+            <td class="editable" contenteditable></td>
+            <td class="editable" contenteditable></td>
+          </tr>
+          <tr>
+            <td class="position">12H V/G</td>
+            <td class="editable" contenteditable></td>
+            <td class="editable" contenteditable></td>
+            <td class="editable" contenteditable></td>
+            <td class="editable" contenteditable></td>
+          </tr>
+          <tr>
+            <td class="position">MM</td>
+            <td class="editable" contenteditable></td>
+            <td class="editable" contenteditable></td>
+            <td class="editable" contenteditable></td>
+            <td class="editable" contenteditable></td>
+          </tr>
+          <tr>
+            <td class="position">Δ</td>
+            <td class="editable" contenteditable></td>
+            <td class="editable" contenteditable></td>
+            <td class="editable" contenteditable></td>
+            <td class="editable" contenteditable></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="small">Les données sont automatiquement enregistrées dans ton navigateur. Tu peux les sauvegarder ou les
+      charger manuellement via les boutons ci-dessus.</p>
+  </div>
+
+  <script>
+    const table = document.getElementById('ticketTable');
+    const saveBtn = document.getElementById('saveLocal');
+    const loadBtn = document.getElementById('loadLocal');
+    const clearBtn = document.getElementById('clearTable');
+    const statusMsg = document.getElementById('statusMsg');
+    const STORAGE_KEY = 'ticketArmageData';
+
+    function getTableData() {
+      const rows = Array.from(table.querySelectorAll('tbody tr'));
+      return rows.map(r => Array.from(r.querySelectorAll('td')).slice(1).map(c => c.innerText.trim()));
+    }
+
+    function setTableData(data) {
+      const rows = Array.from(table.querySelectorAll('tbody tr'));
+      data.forEach((row, i) => {
+        const cells = rows[i]?.querySelectorAll('td.editable');
+        if (cells) row.forEach((val, j) => cells[j].innerText = val || '');
+      });
+    }
+
+    function saveLocal() {
+      const data = getTableData();
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      statusMsg.textContent = '💾 Sauvegardé localement (' + new Date().toLocaleTimeString() + ')';
+    }
+
+    function loadLocal() {
+      const json = localStorage.getItem(STORAGE_KEY);
+      if (!json) return alert('Aucune sauvegarde trouvée.');
+      const data = JSON.parse(json);
+      setTableData(data);
+      statusMsg.textContent = '📂 Données chargées.';
+    }
+
+    function autoSave() {
+      saveLocal();
+    }
+
+    table.addEventListener('input', () => {
+      statusMsg.textContent = '⏳ Modifications en cours...';
+      clearTimeout(window.autoSaveTimer);
+      window.autoSaveTimer = setTimeout(autoSave, 800);
+    });
+
+    saveBtn.addEventListener('click', saveLocal);
+    loadBtn.addEventListener('click', loadLocal);
+
+    clearBtn.addEventListener('click', () => {
+      if (confirm('Effacer toutes les données du tableau ?')) {
+        table.querySelectorAll('td.editable').forEach(td => td.innerText = '');
+        localStorage.removeItem(STORAGE_KEY);
+        statusMsg.textContent = '🧹 Tableau réinitialisé';
+      }
+    });
+
+    // Charger automatiquement à l'ouverture si données existantes
+    window.addEventListener('DOMContentLoaded', () => {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        setTableData(JSON.parse(saved));
+        statusMsg.textContent = '📂 Données restaurées automatiquement';
+      }
+    });
+  </script>
 </body>
 
 </html>
