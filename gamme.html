@@ -2,67 +2,213 @@
 <html lang="fr">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ajouter une Gamme de Mouvement</title>
-  <link rel="stylesheet" href="style1.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gestion PDF Horlogerie</title>
+  <style>
+    body {
+      font-family: "Playfair Display", serif;
+      margin: 0;
+      background: #f2f2f2;
+      color: #111;
+      text-align: center;
+    }
+
+    header {
+      background: #1a1a1a;
+      padding: 30px 20px;
+      text-align: center;
+      color: #d4af37;
+      font-size: 2.4rem;
+      letter-spacing: 3px;
+      font-weight: 600;
+      text-transform: uppercase;
+      border-bottom: 2px solid #d4af37;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: 60px auto;
+      background: #ffffffdd;
+      padding: 40px;
+      border-radius: 20px;
+      backdrop-filter: blur(6px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+      border: 1px solid #333;
+      text-align: center;
+    }
+
+    h2 {
+      margin-top: 0;
+    }
+
+    .movement-card {
+      border: 1px solid #ddd;
+      padding: 20px;
+      margin-top: 20px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, #fafafa, #f0f0f0);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .movement-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+    }
+
+    .pdf-links a {
+      display: inline-block;
+      margin-right: 15px;
+    }
+
+    button {
+      padding: 10px 18px;
+      border-radius: 10px;
+      border: none;
+      background: #222;
+      color: white;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background: #444;
+    }
+
+    input {
+      margin: 10px auto;
+      padding: 12px 14px;
+      width: 60%;
+      border-radius: 10px;
+      border: 1px solid #555;
+      font-size: 1.1rem;
+      background: #fafafa;
+      color: #111;
+      display: block;
+      text-align: center;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #999;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.15);
+    }
+
+    input[type=file] {
+      background: #fff;
+      border: 1px solid #cfcfcf;
+      padding: 10px;
+      cursor: pointer;
+    }
+
+    input[type=file]::-webkit-file-upload-button {
+      background: #222;
+      color: white;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    input[type=file]::-webkit-file-upload-button:hover {
+      background: #444;
+    }
+  </style>
 </head>
 
 <body>
+  <header>Gammes Horlogerie</header>
+  <div style="text-align:center; margin-top:20px;">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Watch_Movement.jpg/640px-Watch_Movement.jpg"
+      style="max-width:240px; opacity:0.9; border-radius:12px;" />
+  </div>
   <div class="container">
-    <div class="card">
-      <h2>Ajouter une gamme de mouvement</h2>
+    <h2>Ajouter une gamme de mouvement</h2>
 
-      <div class="form-group">
-        <label for="nomMouvement">Nom du mouvement :</label>
-        <input type="text" id="nomMouvement" placeholder="ex: 64-97">
-      </div>
 
-      <div class="form-group">
-        <p>PDF de montage :</p>
-        <div class="file-input-wrapper">
-          <input type="file" id="pdfMontage" class="file-input">
-          <label for="pdfMontage" class="file-label">Choisir un fichier</label>
-          <span class="file-name">Aucun fichier choisi</span>
-        </div>
-      </div>
 
-      <div class="form-group">
-        <p>PDF de démontage :</p>
-        <div class="file-input-wrapper">
-          <input type="file" id="pdfDemontage" class="file-input">
-          <label for="pdfDemontage" class="file-label">Choisir un fichier</label>
-          <span class="file-name">Aucun fichier choisi</span>
-        </div>
-      </div>
+    <label style="font-weight:600;">Nom du mouvement :</label> :</label><br>
+    <input type="text" id="movementName" placeholder="ex: 64-97" /><br>
 
-      <button class="btn-add">Ajouter la gamme</button>
+    <label>PDF de montage :</label><br>
+    <input type="file" id="montagePDF" accept="application/pdf" /><br>
 
-      <h3>Gammes enregistrées</h3>
+    <label>PDF de démontage :</label><br>
+    <input type="file" id="demontagePDF" accept="application/pdf" /><br>
 
-      <div class="recorded-range">
-        <p class="range-id">6497</p>
-        <div class="range-links">
-          <a href="#">PDF Montage</a>
-          <a href="#">PDF Démontage</a>
-        </div>
-        <button class="btn-delete">Supprimer</button>
-      </div>
-    </div>
+    <button onclick="addMovement()">Ajouter la gamme</button>
+
+    <h2>Gammes enregistrées</h2>
+    <div id="list"></div>
   </div>
 
   <script>
-    // Script pour afficher le nom du fichier sélectionné
-    document.querySelectorAll('.file-input').forEach(input => {
-      input.addEventListener('change', function () {
-        const fileNameSpan = this.nextElementSibling.nextElementSibling;
-        if (this.files.length > 0) {
-          fileNameSpan.textContent = this.files[0].name;
-        } else {
-          fileNameSpan.textContent = 'Aucun fichier choisi';
-        }
+    function loadData() {
+      return JSON.parse(localStorage.getItem("horlogerie_movements") || "[]");
+    }
+
+    function saveData(data) {
+      localStorage.setItem("horlogerie_movements", JSON.stringify(data));
+    }
+
+    function addMovement() {
+      const name = document.getElementById("movementName").value;
+      const montage = document.getElementById("montagePDF").files[0];
+      const demontage = document.getElementById("demontagePDF").files[0];
+
+      if (!name || !montage || !demontage) {
+        alert("Merci de remplir tous les champs et sélectionner les deux PDF.");
+        return;
+      }
+
+      const reader1 = new FileReader();
+      const reader2 = new FileReader();
+
+      reader1.onload = function (e1) {
+        reader2.onload = function (e2) {
+          const list = loadData();
+          list.push({
+            name,
+            montage: e1.target.result,
+            demontage: e2.target.result
+          });
+          saveData(list);
+          displayMovements();
+        };
+        reader2.readAsDataURL(demontage);
+      };
+      reader1.readAsDataURL(montage);
+    }
+
+    function deleteMovement(index) {
+      const list = loadData();
+      list.splice(index, 1);
+      saveData(list);
+      displayMovements();
+    }
+
+    function displayMovements() {
+      const list = loadData();
+      const container = document.getElementById("list");
+      container.innerHTML = "";
+
+      list.forEach((m, i) => {
+        container.innerHTML += `
+          <div class="movement-card">
+            <strong>${m.name}</strong><br><br>
+            <div class="pdf-links">
+              <a href="${m.montage}" download="montage.pdf">PDF Montage</a>
+              <a href="${m.demontage}" download="demontage.pdf">PDF Démontage</a>
+            </div>
+            <button onclick="deleteMovement(${i})">Supprimer</button>
+          </div>
+        `;
       });
-    });
+    }
+
+    displayMovements();
   </script>
 </body>
 
