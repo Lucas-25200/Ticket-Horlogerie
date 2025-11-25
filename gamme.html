@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ajouter une Gamme de Mouvement</title>
+  <link rel="stylesheet" href="style1.css">
+</head>
+
+<body>
+  <div class="container">
+    <div class="card">
+      <h2>Ajouter une gamme de mouvement</h2>
+
+      <div class="form-group">
+        <label for="nomMouvement">Nom du mouvement :</label>
+        <input type="text" id="nomMouvement" placeholder="ex: 64-97">
+      </div>
+
+      <div class="form-group">
+        <p>PDF de montage :</p>
+        <div class="file-input-wrapper">
+          <input type="file" id="pdfMontage" class="file-input">
+          <label for="pdfMontage" class="file-label">Choisir un fichier</label>
+          <span class="file-name">Aucun fichier choisi</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <p>PDF de démontage :</p>
+        <div class="file-input-wrapper">
+          <input type="file" id="pdfDemontage" class="file-input">
+          <label for="pdfDemontage" class="file-label">Choisir un fichier</label>
+          <span class="file-name">Aucun fichier choisi</span>
+        </div>
+      </div>
+
+      <button class="btn-add">Ajouter la gamme</button>
+
+      <h3>Gammes enregistrées</h3>
+
+      <div class="recorded-range">
+        <p class="range-id">6497</p>
+        <div class="range-links">
+          <a href="#">PDF Montage</a>
+          <a href="#">PDF Démontage</a>
+        </div>
+        <button class="btn-delete">Supprimer</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Script pour afficher le nom du fichier sélectionné
+    document.querySelectorAll('.file-input').forEach(input => {
+      input.addEventListener('change', function () {
+        const fileNameSpan = this.nextElementSibling.nextElementSibling;
+        if (this.files.length > 0) {
+          fileNameSpan.textContent = this.files[0].name;
+        } else {
+          fileNameSpan.textContent = 'Aucun fichier choisi';
+        }
+      });
+    });
+  </script>
+</body>
+
+</html>
