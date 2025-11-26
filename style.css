@@ -5,12 +5,16 @@
     }
 
     body {
+      background-image: url(Image/header_desktop_gphg_iconique_fr_v4.jpg);
       font-family: Inter, system-ui, Arial, sans-serif;
       padding: 16px;
-      background: linear-gradient(#fff, #fbfdff);
-      color: #222;
+      padding: 0;
     }
+.img{
 
+      width: 100%;
+     height: auto;
+}
     .card {
       max-width: 1000px;
       margin: 0 auto;
