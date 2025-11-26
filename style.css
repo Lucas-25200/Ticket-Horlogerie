@@ -9,13 +9,14 @@
       font-family: Inter, system-ui, Arial, sans-serif;
       padding: 16px;
       padding: 0;
-    
+
     }
-.img{
+
+    .img{
 
       width: 100%;
-     height: auto;
-}
+      height: auto;
+    }
     .card {
       max-width: 1000px;
       margin: 0 auto;
