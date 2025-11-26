@@ -6,6 +6,117 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Gestion PDF Horlogerie</title>
+  <style>
+    body {
+      font-family: "Playfair Display", serif;
+      margin: 0;
+      background: #f2f2f2;
+      color: #111;
+      text-align: center;
+    }
+
+    header {
+      background: #1a1a1a;
+      padding: 30px 20px;
+      text-align: center;
+      color: #d4af37;
+      font-size: 2.4rem;
+      letter-spacing: 3px;
+      font-weight: 600;
+      text-transform: uppercase;
+      border-bottom: 2px solid #d4af37;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: 60px auto;
+      background: #ffffffdd;
+      padding: 40px;
+      border-radius: 20px;
+      backdrop-filter: blur(6px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+      border: 1px solid #333;
+      text-align: center;
+    }
+
+    h2 {
+      margin-top: 0;
+    }
+
+    .movement-card {
+      border: 1px solid #ddd;
+      padding: 20px;
+      margin-top: 20px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, #fafafa, #f0f0f0);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .movement-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+    }
+
+    .pdf-links a {
+      display: inline-block;
+      margin-right: 15px;
+    }
+
+    button {
+      padding: 10px 18px;
+      border-radius: 10px;
+      border: none;
+      background: #222;
+      color: white;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background: #444;
+    }
+
+    input {
+      margin: 10px auto;
+      padding: 12px 14px;
+      width: 60%;
+      border-radius: 10px;
+      border: 1px solid #555;
+      font-size: 1.1rem;
+      background: #fafafa;
+      color: #111;
+      display: block;
+      text-align: center;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #999;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.15);
+    }
+
+    input[type=file] {
+      background: #fff;
+      border: 1px solid #cfcfcf;
+      padding: 10px;
+      cursor: pointer;
+    }
+
+    input[type=file]::-webkit-file-upload-button {
+      background: #222;
+      color: white;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    input[type=file]::-webkit-file-upload-button:hover {
+      background: #444;
+    }
+  </style>
 </head>
 
 <body>
