@@ -7,12 +7,6 @@
     body {
       background-image: url(Image/header_desktop_gphg_iconique_fr_v4.jpg);
       font-family:system-ui;
-      padding: 16px;
-      padding: 0;
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      overflow: hidden;
       width: 100%;
       height: auto;
 
