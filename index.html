@@ -1,360 +1,214 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fr">
 
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Ticket Armage — Multi-sauvegardes (Responsive)</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gestion PDF Horlogerie</title>
   <style>
-    :root {
-      --gray: #f2f4f7;
-      --line: #bdbdbd;
-      --accent: #2b6cb0
-    }
-
     body {
-      font-family: Inter, system-ui, Arial, sans-serif;
-      padding: 16px;
-      background: linear-gradient(#fff, #fbfdff);
-      color: #222;
+      font-family: "Playfair Display", serif;
+      margin: 0;
+      background: #f2f2f2;
+      color: #111;
+      text-align: center;
     }
 
-    .card {
-      max-width: 1000px;
-      margin: 0 auto;
-      background: #fff;
-      border-radius: 12px;
+    header {
+      background: #1a1a1a;
+      padding: 30px 20px;
+      text-align: center;
+      color: #d4af37;
+      font-size: 2.4rem;
+      letter-spacing: 3px;
+      font-weight: 600;
+      text-transform: uppercase;
+      border-bottom: 2px solid #d4af37;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: 60px auto;
+      background: #ffffffdd;
+      padding: 40px;
+      border-radius: 20px;
+      backdrop-filter: blur(6px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+      border: 1px solid #333;
+      text-align: center;
+    }
+
+    h2 {
+      margin-top: 0;
+    }
+
+    .movement-card {
+      border: 1px solid #ddd;
       padding: 20px;
-      box-shadow: 0 6px 20px rgba(30, 40, 50, 0.06)
+      margin-top: 20px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, #fafafa, #f0f0f0);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+      transition: transform 0.2s, box-shadow 0.2s;
     }
 
-    h1 {
-      font-size: 18px;
-      margin: 0 0 12px;
-      text-align: center
+    .movement-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
     }
 
-    .toolbar {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      justify-content: center;
-      margin-bottom: 12px
-    }
-
-    select,
-    input[type=text] {
-      padding: 8px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-size: 14px;
-      flex: 1;
-      min-width: 130px
+    .pdf-links a {
+      display: inline-block;
+      margin-right: 15px;
     }
 
     button {
-      background: var(--accent);
-      color: #fff;
-      border: 0;
-      padding: 8px 12px;
-      border-radius: 7px;
+      padding: 10px 18px;
+      border-radius: 10px;
+      border: none;
+      background: #222;
+      color: white;
       cursor: pointer;
-      font-weight: 600;
-      transition: 0.2s;
-      flex: 1;
-      min-width: 100px
+      margin-top: 10px;
     }
 
     button:hover {
-      opacity: 0.85
+      background: #444;
     }
 
-    button.secondary {
+    input {
+      margin: 10px auto;
+      padding: 12px 14px;
+      width: 60%;
+      border-radius: 10px;
+      border: 1px solid #555;
+      font-size: 1.1rem;
+      background: #fafafa;
+      color: #111;
+      display: block;
+      text-align: center;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #999;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.15);
+    }
+
+    input[type=file] {
       background: #fff;
-      color: var(--accent);
-      border: 1px solid var(--accent)
-    }
-
-    .status {
-      font-size: 13px;
-      color: #555;
-      width: 100%;
-      text-align: center;
-      margin-top: 6px
-    }
-
-    .table-wrap {
-      overflow-x: auto;
-      margin-top: 8px
-    }
-
-    table.ticket {
-      border-collapse: collapse;
-      width: 100%;
-      min-width: 650px
-    }
-
-    table.ticket thead th {
-      background: var(--gray);
-      border: 1px solid var(--line);
-      padding: 8px;
-      text-align: center;
-      font-weight: 700
-    }
-
-    table.ticket th,
-    table.ticket td {
-      border: 1px solid var(--line);
+      border: 1px solid #cfcfcf;
       padding: 10px;
-      text-align: center;
-      font-size: 14px
+      cursor: pointer;
     }
 
-    td.position {
-      font-weight: 700;
-      text-align: left;
-      padding-left: 14px;
-      background: #fff
+    input[type=file]::-webkit-file-upload-button {
+      background: #222;
+      color: white;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.2s;
     }
 
-    td.editable {
-      min-width: 80px
-    }
-
-    td.editable[contenteditable] {
-      background: #fff
-    }
-
-    .small {
-      font-size: 12px;
-      color: #555;
-      margin-top: 10px;
-      text-align: center
-    }
-
-    /* Responsive */
-    @media (max-width:768px) {
-      .card {
-        padding: 12px;
-        border-radius: 8px
-      }
-
-      h1 {
-        font-size: 16px
-      }
-
-      table.ticket th,
-      table.ticket td {
-        padding: 6px;
-        font-size: 12px
-      }
-
-      select,
-      input,
-      button {
-        font-size: 13px;
-        padding: 6px;
-        min-width: 80px
-      }
-    }
-
-    @media (max-width:480px) {
-      .toolbar {
-        flex-direction: column;
-        align-items: stretch
-      }
-
-      button,
-      select,
-      input {
-        width: 100%
-      }
-
-      .status {
-        font-size: 12px
-      }
+    input[type=file]::-webkit-file-upload-button:hover {
+      background: #444;
     }
   </style>
 </head>
 
 <body>
-  <div class="card">
-    <h1>Application — Ticket Armage (Multi-sauvegardes)</h1>
+  <header>Gammes Horlogerie</header>
+  <div style="text-align:center; margin-top:20px;">
+    <img src="Image/header_desktop_gphg_iconique_fr_v4.jpg" style="max-width:240px; opacity:0.9; border-radius:12px;" />
+  </div>
+  <div class="container">
+    <h2>Ajouter une gamme de mouvement</h2>
 
-    <div class="toolbar">
-      <input id="saveName" type="text" placeholder="Nom de la sauvegarde" />
-      <button id="saveLocal">💾 Sauvegarder</button>
-      <select id="savesList"></select>
-      <button id="loadLocal">📂 Charger</button>
-      <button id="deleteSave" class="secondary">🗑 Supprimer</button>
-      <button id="clearTable" class="secondary">🧹 Réinitialiser</button>
-      <div class="status" id="statusMsg">Prêt</div>
-    </div>
 
-    <div class="table-wrap">
-      <table class="ticket" id="ticketTable">
-        <thead>
-          <tr>
-            <th colspan="5">TICKET N° :</th>
-          </tr>
-          <tr>
-            <th>Positions</th>
-            <th>Armage 0h</th>
-            <th></th>
-            <th>Armage 24h</th>
-            <th></th>
-          </tr>
-          <tr>
-            <th></th>
-            <th>Rate</th>
-            <th>Ampl.</th>
-            <th>Rate</th>
-            <th>Ampl.</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="position">CH</td>
-            <td class="editable" contenteditable></td>
-            <td class="editable" contenteditable></td>
-            <td class="editable" contenteditable></td>
-            <td class="editable" contenteditable></td>
-          </tr>
-          <tr>
-            <td class="position">FH</td>
-            <td class="editable" contenteditable></td>
-            <td class="editable" contenteditable></td>
-            <td class="editable" contenteditable></td>
-            <td class="editable" contenteditable></td>
-          </tr>
-          <tr>
-            <td class="position">3H V/H</td>
-            <td class="editable" contenteditable></td>
-            <td class="editable" contenteditable></td>
-            <td class="editable" contenteditable></td>
-            <td class="editable" contenteditable></td>
-          </tr>
-          <tr>
-            <td class="position">6H V/D</td>
-            <td class="editable" contenteditable></td>
-            <td class="editable" contenteditable></td>
-            <td class="editable" contenteditable></td>
-            <td class="editable" contenteditable></td>
-          </tr>
-          <tr>
-            <td class="position">9H V/B</td>
-            <td class="editable" contenteditable></td>
-            <td class="editable" contenteditable></td>
-            <td class="editable" contenteditable></td>
-            <td class="editable" contenteditable></td>
-          </tr>
-          <tr>
-            <td class="position">12H V/G</td>
-            <td class="editable" contenteditable></td>
-            <td class="editable" contenteditable></td>
-            <td class="editable" contenteditable></td>
-            <td class="editable" contenteditable></td>
-          </tr>
-          <tr>
-            <td class="position">MM</td>
-            <td class="editable" contenteditable></td>
-            <td class="editable" contenteditable></td>
-            <td class="editable" contenteditable></td>
-            <td class="editable" contenteditable></td>
-          </tr>
-          <tr>
-            <td class="position">Δ</td>
-            <td class="editable" contenteditable></td>
-            <td class="editable" contenteditable></td>
-            <td class="editable" contenteditable></td>
-            <td class="editable" contenteditable></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
 
-    <p class="small">Tu peux créer plusieurs sauvegardes locales et les recharger plus tard, même sur mobile.</p>
+    <label style="font-weight:600;">Nom du mouvement :</label> :</label><br>
+    <input type="text" id="movementName" placeholder="ex: 64-97" /><br>
+
+    <label>PDF de montage :</label><br>
+    <input type="file" id="montagePDF" accept="application/pdf" /><br>
+
+    <label>PDF de démontage :</label><br>
+    <input type="file" id="demontagePDF" accept="application/pdf" /><br>
+
+    <button onclick="addMovement()">Ajouter la gamme</button>
+
+    <h2>Gammes enregistrées</h2>
+    <div id="list"></div>
   </div>
 
   <script>
-    const table = document.getElementById('ticketTable');
-    const saveBtn = document.getElementById('saveLocal');
-    const loadBtn = document.getElementById('loadLocal');
-    const clearBtn = document.getElementById('clearTable');
-    const deleteBtn = document.getElementById('deleteSave');
-    const saveName = document.getElementById('saveName');
-    const savesList = document.getElementById('savesList');
-    const statusMsg = document.getElementById('statusMsg');
-    const STORAGE_KEY = 'ticketArmageSaves';
-
-    function getTableData() {
-      const rows = Array.from(table.querySelectorAll('tbody tr'));
-      return rows.map(r => Array.from(r.querySelectorAll('td')).slice(1).map(c => c.innerText.trim()));
+    function loadData() {
+      return JSON.parse(localStorage.getItem("horlogerie_movements") || "[]");
     }
 
-    function setTableData(data) {
-      const rows = Array.from(table.querySelectorAll('tbody tr'));
-      data.forEach((row, i) => {
-        const cells = rows[i]?.querySelectorAll('td.editable');
-        if (cells) row.forEach((val, j) => cells[j].innerText = val || '');
+    function saveData(data) {
+      localStorage.setItem("horlogerie_movements", JSON.stringify(data));
+    }
+
+    function addMovement() {
+      const name = document.getElementById("movementName").value;
+      const montage = document.getElementById("montagePDF").files[0];
+      const demontage = document.getElementById("demontagePDF").files[0];
+
+      if (!name || !montage || !demontage) {
+        alert("Merci de remplir tous les champs et sélectionner les deux PDF.");
+        return;
+      }
+
+      const reader1 = new FileReader();
+      const reader2 = new FileReader();
+
+      reader1.onload = function (e1) {
+        reader2.onload = function (e2) {
+          const list = loadData();
+          list.push({
+            name,
+            montage: e1.target.result,
+            demontage: e2.target.result
+          });
+          saveData(list);
+          displayMovements();
+        };
+        reader2.readAsDataURL(demontage);
+      };
+      reader1.readAsDataURL(montage);
+    }
+
+    function deleteMovement(index) {
+      const list = loadData();
+      list.splice(index, 1);
+      saveData(list);
+      displayMovements();
+    }
+
+    function displayMovements() {
+      const list = loadData();
+      const container = document.getElementById("list");
+      container.innerHTML = "";
+
+      list.forEach((m, i) => {
+        container.innerHTML += `
+          <div class="movement-card">
+            <strong>${m.name}</strong><br><br>
+            <div class="pdf-links">
+              <a href="${m.montage}" download="montage.pdf">PDF Montage</a>
+              <a href="${m.demontage}" download="demontage.pdf">PDF Démontage</a>
+            </div>
+            <button onclick="deleteMovement(${i})">Supprimer</button>
+          </div>
+        `;
       });
     }
 
-    function loadSavesList() {
-      const saves = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
-      savesList.innerHTML = '';
-      Object.keys(saves).forEach(key => {
-        const opt = document.createElement('option');
-        opt.value = key;
-        opt.textContent = key;
-        savesList.appendChild(opt);
-      });
-    }
-
-    function saveLocal() {
-      const name = saveName.value.trim() || 'Sauvegarde_' + new Date().toLocaleString();
-      const saves = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
-      saves[name] = getTableData();
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(saves));
-      loadSavesList();
-      savesList.value = name;
-      statusMsg.textContent = '💾 Sauvegarde « ' + name + ' » enregistrée.';
-    }
-
-    function loadLocal() {
-      const name = savesList.value;
-      if (!name) return alert('Aucune sauvegarde sélectionnée.');
-      const saves = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
-      if (!saves[name]) return alert('Sauvegarde introuvable.');
-      setTableData(saves[name]);
-      statusMsg.textContent = '📂 Sauvegarde « ' + name + ' » chargée.';
-    }
-
-    function deleteSave() {
-      const name = savesList.value;
-      if (!name) return alert('Aucune sauvegarde sélectionnée.');
-      const saves = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
-      if (confirm('Supprimer la sauvegarde « ' + name + ' » ?')) {
-        delete saves[name];
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(saves));
-        loadSavesList();
-        statusMsg.textContent = '🗑 Sauvegarde supprimée.';
-      }
-    }
-
-    clearBtn.addEventListener('click', () => {
-      if (confirm('Effacer le tableau actuel ?')) {
-        table.querySelectorAll('td.editable').forEach(td => td.innerText = '');
-        statusMsg.textContent = '🧹 Tableau vidé';
-      }
-    });
-
-    saveBtn.addEventListener('click', saveLocal);
-    loadBtn.addEventListener('click', loadLocal);
-    deleteBtn.addEventListener('click', deleteSave);
-
-    window.addEventListener('DOMContentLoaded', loadSavesList);
+    displayMovements();
   </script>
 </body>
-<a href="gamme.html" class="btn2">Site PDF Gamme</a>
+
 </html>
