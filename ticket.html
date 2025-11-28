@@ -1,12 +1,12 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fr">
-<link rel="stylesheet" href="style.css">
-<link rel="stylesheet" href="index.html">
+<link rel="stylesheet" href="style.css" />
+<link rel="stylesheet" href="index.html" />
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Ticket Armage — Multi-sauvegardes (Responsive)</title>
-<img src="Image/header_desktop_gphg_iconique_fr_v4.jpg" class="img-fond">
 </head>
 
 <body>
@@ -105,38 +105,45 @@
       </table>
     </div>
 
-    <p class="small">Tu peux créer plusieurs sauvegardes locales et les recharger plus tard, même sur mobile.</p>
+    <p class="small">
+      Tu peux créer plusieurs sauvegardes locales et les recharger plus tard,
+      même sur mobile.
+    </p>
   </div>
 
   <script>
-    const table = document.getElementById('ticketTable');
-    const saveBtn = document.getElementById('saveLocal');
-    const loadBtn = document.getElementById('loadLocal');
-    const clearBtn = document.getElementById('clearTable');
-    const deleteBtn = document.getElementById('deleteSave');
-    const saveName = document.getElementById('saveName');
-    const savesList = document.getElementById('savesList');
-    const statusMsg = document.getElementById('statusMsg');
-    const STORAGE_KEY = 'ticketArmageSaves';
+    const table = document.getElementById("ticketTable");
+    const saveBtn = document.getElementById("saveLocal");
+    const loadBtn = document.getElementById("loadLocal");
+    const clearBtn = document.getElementById("clearTable");
+    const deleteBtn = document.getElementById("deleteSave");
+    const saveName = document.getElementById("saveName");
+    const savesList = document.getElementById("savesList");
+    const statusMsg = document.getElementById("statusMsg");
+    const STORAGE_KEY = "ticketArmageSaves";
 
     function getTableData() {
-      const rows = Array.from(table.querySelectorAll('tbody tr'));
-      return rows.map(r => Array.from(r.querySelectorAll('td')).slice(1).map(c => c.innerText.trim()));
+      const rows = Array.from(table.querySelectorAll("tbody tr"));
+      return rows.map((r) =>
+        Array.from(r.querySelectorAll("td"))
+          .slice(1)
+          .map((c) => c.innerText.trim())
+      );
     }
 
     function setTableData(data) {
-      const rows = Array.from(table.querySelectorAll('tbody tr'));
+      const rows = Array.from(table.querySelectorAll("tbody tr"));
       data.forEach((row, i) => {
-        const cells = rows[i]?.querySelectorAll('td.editable');
-        if (cells) row.forEach((val, j) => cells[j].innerText = val || '');
+        const cells = rows[i]?.querySelectorAll("td.editable");
+        if (cells) row.forEach((val, j) => (cells[j].innerText = val || ""));
       });
     }
 
     function loadSavesList() {
-      const saves = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
-      savesList.innerHTML = '';
-      Object.keys(saves).forEach(key => {
-        const opt = document.createElement('option');
+      const saves = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+      savesList.innerHTML = "";
+      Object.keys(saves).forEach((key) => {
+        const opt = document.createElement("option");
         opt.value = key;
         opt.textContent = key;
         savesList.appendChild(opt);
@@ -144,50 +151,52 @@
     }
 
     function saveLocal() {
-      const name = saveName.value.trim() || 'Sauvegarde_' + new Date().toLocaleString();
-      const saves = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+      const name =
+        saveName.value.trim() || "Sauvegarde_" + new Date().toLocaleString();
+      const saves = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
       saves[name] = getTableData();
       localStorage.setItem(STORAGE_KEY, JSON.stringify(saves));
       loadSavesList();
       savesList.value = name;
-      statusMsg.textContent = '💾 Sauvegarde « ' + name + ' » enregistrée.';
+      statusMsg.textContent = "💾 Sauvegarde « " + name + " » enregistrée.";
     }
 
     function loadLocal() {
       const name = savesList.value;
-      if (!name) return alert('Aucune sauvegarde sélectionnée.');
-      const saves = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
-      if (!saves[name]) return alert('Sauvegarde introuvable.');
+      if (!name) return alert("Aucune sauvegarde sélectionnée.");
+      const saves = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+      if (!saves[name]) return alert("Sauvegarde introuvable.");
       setTableData(saves[name]);
-      statusMsg.textContent = '📂 Sauvegarde « ' + name + ' » chargée.';
+      statusMsg.textContent = "📂 Sauvegarde « " + name + " » chargée.";
     }
 
     function deleteSave() {
       const name = savesList.value;
-      if (!name) return alert('Aucune sauvegarde sélectionnée.');
-      const saves = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
-      if (confirm('Supprimer la sauvegarde « ' + name + ' » ?')) {
+      if (!name) return alert("Aucune sauvegarde sélectionnée.");
+      const saves = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+      if (confirm("Supprimer la sauvegarde « " + name + " » ?")) {
         delete saves[name];
         localStorage.setItem(STORAGE_KEY, JSON.stringify(saves));
         loadSavesList();
-        statusMsg.textContent = '🗑 Sauvegarde supprimée.';
+        statusMsg.textContent = "🗑 Sauvegarde supprimée.";
       }
     }
 
-    clearBtn.addEventListener('click', () => {
-      if (confirm('Effacer le tableau actuel ?')) {
-        table.querySelectorAll('td.editable').forEach(td => td.innerText = '');
-        statusMsg.textContent = '🧹 Tableau vidé';
+    clearBtn.addEventListener("click", () => {
+      if (confirm("Effacer le tableau actuel ?")) {
+        table
+          .querySelectorAll("td.editable")
+          .forEach((td) => (td.innerText = ""));
+        statusMsg.textContent = "🧹 Tableau vidé";
       }
     });
 
-    saveBtn.addEventListener('click', saveLocal);
-    loadBtn.addEventListener('click', loadLocal);
-    deleteBtn.addEventListener('click', deleteSave);
+    saveBtn.addEventListener("click", saveLocal);
+    loadBtn.addEventListener("click", loadLocal);
+    deleteBtn.addEventListener("click", deleteSave);
 
-    window.addEventListener('DOMContentLoaded', loadSavesList);
+    window.addEventListener("DOMContentLoaded", loadSavesList);
   </script>
 </body>
-<a href="gamme.html" class="btn2">Site PDF Gamme</a>
 
 </html>
